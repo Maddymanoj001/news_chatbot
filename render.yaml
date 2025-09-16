@@ -1,0 +1,48 @@
+services:
+  # Backend Service
+  - type: web
+    name: rag-news-backend
+    env: node
+    region: singapore  # Choose the region closest to you
+    plan: free  # Or upgrade to a paid plan for production
+    build:
+      npmInstallCommand: npm ci
+      buildCommand: npm run build
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        fromDatabase:
+          name: rag-news-db
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: VECTOR_SERVICE_URL
+        value: http://localhost:5001  # Update with your vector service URL
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://rag-news-frontend.onrender.com  # Update with your frontend URL
+    healthCheckPath: /health
+    autoDeploy: true
+
+  # Frontend Service
+  - type: web
+    name: rag-news-frontend
+    env: vite
+    region: singapore  # Should match backend region
+    plan: free
+    build:
+      npmInstallCommand: npm ci
+      buildCommand: npm run build
+      staticPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://rag-news-backend.onrender.com  # Update with your backend URL
+    autoDeploy: true
