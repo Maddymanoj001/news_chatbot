@@ -17,10 +17,11 @@ const corsOptions = {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.some(allowedOrigin => 
-      origin === allowedOrigin || 
-      origin.replace(/\\/$/, '') === allowedOrigin
-    )) {
+    if (allowedOrigins.some(allowedOrigin => {
+      const normalizedOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin;
+      const normalizedAllowed = allowedOrigin.endsWith('/') ? allowedOrigin.slice(0, -1) : allowedOrigin;
+      return normalizedOrigin === normalizedAllowed;
+    })) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
