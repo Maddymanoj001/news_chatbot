@@ -5,13 +5,12 @@ import chatRoutes from './routes/chat.js'; // Adjust the import path as needed
 
 const app = express();
 
+import { config } from './utils/config.js';
+
 // CORS configuration
-const allowedOrigins = [
-  'https://ragnewschatbot.netlify.app',
-  'https://frontend-trin.onrender.com',
-  'http://localhost:5173',
-  'http://localhost:4000'
-];
+const allowedOrigins = config.corsOrigin
+  ? config.corsOrigin.split(',').map(origin => origin.trim())
+  : ['http://localhost:5173']; // Default fallback
 
 const corsOptions = {
   origin: function (origin, callback) {
