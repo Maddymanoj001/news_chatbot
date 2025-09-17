@@ -5,7 +5,25 @@ import { config } from './utils/config.js';
 import chatRoutes from './routes/chat.js';
 
 const app = express();
-app.use(cors({ origin: config.corsOrigin }));
+const corsOptions = {
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://ragnewschatbot.netlify.app',
+      'http://localhost:5173',
+      'http://localhost:4000'
+    ];
+    
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '1mb' }));
 app.use(morgan('dev'));
 
