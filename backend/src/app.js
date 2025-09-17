@@ -8,6 +8,7 @@ const app = express();
 // CORS configuration
 const allowedOrigins = [
   'https://ragnewschatbot.netlify.app',
+  'https://frontend-trin.onrender.com',
   'http://localhost:5173',
   'http://localhost:4000'
 ];
