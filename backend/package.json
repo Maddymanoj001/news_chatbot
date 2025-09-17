@@ -18,6 +18,10 @@
     "express": "^4.19.2",
     "ioredis": "^5.4.1",
     "morgan": "^1.10.0",
+    "rss-parser": "^3.13.0",
     "uuid": "^9.0.1"
+  },
+  "optionalDependencies": {
+    "faiss-node": "^0.4.1"
   }
 }
